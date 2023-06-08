@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Shanti SMS</title>
+
+</head>
+
+<body class="red lighten-5">
+  <nav class="red lighten-5">
+    <div class="nav-wrapper black-text">
+      <a href="#" class="brand-logo black-text">Shanti SMS</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <!-- <li><a class="black-text z-depth-5">Your Credit Balance is : 50000</a></li> -->
+        <li><a class="waves-effect waves-light black-text">
+            <h6>Welcome, Soni Sir.</h6>
+          </a></li>
+        <a href="#" data-target="slide-out" class="sidenav-trigger">menu</a>
+        <li><a href="/logout" class="waves-effect waves-light btn red z-depth-5">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+  <div class="fixed-action-btn">
+    <a class="btn-floating btn-large red z-depth-5">
+      <i class="large material-icons">mode_edit</i>
+    </a>
+    <ul>
+      <li><a href="#addNewUserModal" class="btn-floating red modal-trigger"><i class="material-icons">group_add</i></a>
+      </li>
+      <li><a class="btn-floating yellow darken-1"><i class="material-icons">timeline</i></a></li>
+      <li><a class="btn-floating green"><i class="material-icons">cloud_download</i></a></li>
+      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+      <li><a class="btn-floating blue"><i class="material-icons">bug_report</i></a></li>
+    </ul>
+  </div>
+
+
+
+  <!-- Modal Structure -->
+  <div id="addNewUserModal" class="modal">
+    <div class="modal-content">
+      <h4 class="center">Create New Customer</h4>
+      <div class="row">
+        <form class="col s12" id="createNewUserForm">
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="fullName" id="fullName" type="text" class="validate" data-length="10" required>
+              <label for="fullName">Full Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="email" id="email" type="email" class="validate" required>
+              <label for="email">Email</label>
+              <div class="email-error"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="password" id="password" type="password" class="validate" required>
+              <label for="password">Password</label>
+              <div class="password-error"></div>
+            </div>
+          </div>
+
+          <button class="waves-effect waves-light btn red center">Submit</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Structure -->
+  <div id="issueCreditsToCustomerModal" class="modal">
+    <div class="modal-content">
+      <h4 class="center">Issue Credits</h4>
+      <div class="row">
+        <form class="col s12" id="issueCreditsToCustomerForm">
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="issueCredits" id="issueCredits" type="text" class="validate" required>
+              <label for="issueCredits">Credits</label>
+            </div>
+          </div>
+          <div class="row" style="display: none;">
+            <div>
+              <input name="customerID" id="customerID" type="text">
+            </div>
+          </div>
+          <h5 id="numberError" class="red-text" style="display: none;">Please enter valid numbers</h5>
+          <button class="waves-effect waves-light btn red center">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="container" style="margin-top: 30px;">
+    <table class="highlight centered z-depth-5">
+      <thead>
+        <tr>
+          <th>User Name</th>
+          <th>Email</th>
+          <th>Customer UID</th>
+          <th>Connected Whatsapp No</th>
+          <th>Balance Credits</th>
+          <th>Issue Credits</th>
+          <th>Delete User</th>
+        </tr>
+      </thead>
+
+      <% if (userListForSoniSirPage != '') { %>
+
+        <% userListForSoniSirPage.forEach((elem, index) => { %>
+          <tbody>
+            <tr>
+              <td><%= elem.fullName %></td>
+              <td><%= elem.email %></td>
+              <td><%= elem._id %></td>
+              
+              <% if (elem.connectedWhatsAppDevices.length > 0) { %>
+              <% elem.connectedWhatsAppDevices.forEach((devices, index) => { %>
+                    <td><%= devices.connectedWano %></td>
+                <% }) %>
+                <% } else { %>
+                  <td><%= 0 %></td>
+                  <% } %>
+              <td><%= elem.AvailableCredits %></td>
+              <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal" class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
+              <!-- <td><i class="material-icons">add_shopping_cart</i></td> -->
+              <td><i class="material-icons">delete_sweep</i></td>
+            </tr>
+          </tbody>
+          <% }) %>
+
+        <% } else { %>
+
+          <h5>Couldn't find users in Database</h3>
+          <% } %>
+
+    </table>
+  </div>
+
+
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.dropdown-trigger');
+      var instances = M.Dropdown.init(elems, {});
+      var elems = document.querySelectorAll('.fixed-action-btn');
+      var instances = M.FloatingActionButton.init(elems, {});
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems, {});
+
+    });
+        const form = document.querySelector('#createNewUserForm');
+        let emailError = document.querySelector('.email-error');
+        let passwordError = document.querySelector('.password-error');
+
+          
+        
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            const fullName = form.fullName.value;
+            const email = form.email.value;
+            const password = form.password.value;
+            try {
+                 const res = await fetch('/register', { 
+                    method: 'POST',
+                    body: JSON.stringify({fullName, email, password}),
+                    headers: {'Content-Type': 'application/json'}
+                  });
+                  const data = await res.json();
+                  if (data.errors) {
+                    emailError.textContent = data.errors.email;
+                    passwordError.textContent = data.errors.password;
+                  }
+                  if (data.user) {
+                    location.assign('/sonisirpage');
+                  }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+
+        // INJECT CUSTOMER ID TO THE MODAL
+        const issueCreditsBtn = document.querySelectorAll('.issueCreditsBtn');
+        issueCreditsBtn.forEach( (elem) => {
+          elem.addEventListener('click', function (event) {
+          event.preventDefault();
+          const customerId = this.parentNode.id;
+          console.log(customerId);
+          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#issueCreditsToCustomerModal'));
+          const customerIDHolder = document.querySelector('#customerID');
+          customerIDHolder.value = customerId;
+        });
+      });
+
+        const issueCreditsToCustomerForm = document.querySelector('#issueCreditsToCustomerForm');
+        issueCreditsToCustomerForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            let customerid = issueCreditsToCustomerForm.customerID.value;
+            console.log(customerid);
+            let credits = issueCreditsToCustomerForm.issueCredits.value;
+            if (credits < 1 || isNaN(credits)) {
+              document.getElementById('numberError').style.display = 'block';
+            } else {
+              try {
+                 const res = await fetch('/issuecreditsendpoint', { 
+                    method: 'POST',
+                    body: JSON.stringify({customerid, credits}),
+                    headers: {'Content-Type': 'application/json'}
+                  });
+                  const data = await res.json();
+                  console.log(data.acknowledged);
+                  if (data.errors) {
+                    // emailError.textContent = data.errors.email;
+                    // passwordError.textContent = data.errors.password;
+                  }
+                  if (data.acknowledged) {
+                    issueCreditsToCustomerForm.reset();
+                    let elem = document.querySelector('#issueCreditsToCustomerModal');
+                    M.Modal.init();
+                    let instance = M.Modal.getInstance(elem);
+                    instance.close();
+                    location.assign('/sonisirpage');
+                  }
+            } catch (error) {
+                console.log(error);
+            }
+            }
+        });
+
+
+
+  </script>
+</body>
+
+</html>

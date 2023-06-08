@@ -1,0 +1,12 @@
+2023/06/01-14:14:50.453 3fe8 Reusing MANIFEST D:\projects\myProjects\soniSirProject\.wwebjs_auth\RemoteAuth-bUwq8qNjT8H3qABzqjbA\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2023/06/01-14:14:50.471 3fe8 Recovering log #18
+2023/06/01-14:14:50.582 3fe8 Reusing old log D:\projects\myProjects\soniSirProject\.wwebjs_auth\RemoteAuth-bUwq8qNjT8H3qABzqjbA\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000018.log 
+2023/06/01-16:07:01.155 3078 Level-0 table #23: started
+2023/06/01-16:07:01.205 3078 Level-0 table #23: 1134524 bytes OK
+2023/06/01-16:07:01.210 3078 Delete type=0 #18
+2023/06/01-16:07:07.383 5448 Compacting 1@1 + 1@2 files
+2023/06/01-16:07:07.519 5448 Generated table #24@1: 43198 keys, 1710202 bytes
+2023/06/01-16:07:07.519 5448 Compacted 1@1 + 1@2 files => 1710202 bytes
+2023/06/01-16:07:07.520 5448 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/06/01-16:07:07.520 5448 Delete type=2 #20
+2023/06/01-16:07:07.520 5448 Delete type=2 #23
