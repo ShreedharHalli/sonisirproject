@@ -1,6 +1,6 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config()
 const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
@@ -14,7 +14,7 @@ const fileUpload = require("express-fileupload");
 
 
 const app = express();
-const PORT = 3001
+const PORT = process.env.PORT || 8001
 
 // middleware
 app.use(express.static('public'))
