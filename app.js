@@ -1,17 +1,17 @@
-require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
+const dotenv = require("dotenv");
 const { MongoStore } = require('wwebjs-mongo');
 const { Client, RemoteAuth, MessageMedia, Buttons, List } = require('whatsapp-web.js');
 const QRCode = require('qrcode');
 const User = require('./models/User');
 const fileUpload = require("express-fileupload");
 
-
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8001
