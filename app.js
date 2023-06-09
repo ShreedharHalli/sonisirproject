@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(fileUpload()); // https://sebhastian.com/express-fileupload/
 // https://www.npmjs.com/package/express-fileupload
 
-
+app.set("views", path.join(__dirname, "views"));
 // view engine
 app.set('view engine', 'ejs');
 
