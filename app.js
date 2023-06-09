@@ -55,9 +55,9 @@ app.listen(PORT, () => {
 
 
 
-// app.get('/', (req, res) => { res.render('login') });
+app.get('/', (req, res) => { res.render('login') });
 app.get('*', checkUser);
-app.get('/', (req, res) => {res.render('sonisirpage')}); // temporarily
+// app.get('/', (req, res) => {res.render('sonisirpage')}); // temporarily
 app.get('/customerPage', requireAuth, (req, res) => res.render('customerPage'));
 app.get('/sonisirpage', requireAuth, (req, res) => res.render('sonisirpage'));
 app.use(authRoutes)
