@@ -10,6 +10,9 @@ const { Client, RemoteAuth, MessageMedia, Buttons, List } = require('whatsapp-we
 const QRCode = require('qrcode');
 const User = require('./models/User');
 const fileUpload = require("express-fileupload");
+const fs = require('fs');
+const path = require('path');
+
 
 dotenv.config();
 
