@@ -214,6 +214,7 @@ app.post('/api/sendmessage', async (req, res) => {
   let mobNoAsUID =  formattedwaNo(mobileNo);
   let message = req.body.message;
   let messageType = req.body.type;
+  console.log(customerId, whatsappClientId, mobileNo, message, messageType);
   // let fileToSend = req.files.filetosend; // library express-fileupload
   // let fileName = req.files.filename;
   
