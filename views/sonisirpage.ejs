@@ -109,9 +109,9 @@
   <!-- Modal Structure -->
   <div id="deleteCustomerModal" class="modal">
     <div class="modal-content">
-      <h4 class="center">Delete Customer</h4>
+      <h4 class="center">Are You Sure ?</h4>
       <div class="row">
-        <form class="col s12" id="issueCreditsToCustomerForm">
+        <form class="col s12" id="deleteCustomerForm">
           <div class="row">
             <div class="input-field col s12 center">
               <h5 id="deleteCustomerDislayName"></h5>
@@ -240,22 +240,6 @@
         });
       });
 
-        // delete customer
-       // INJECT CUSTOMER ID TO THE MODAL
-       const deleteCustomerBtn = document.querySelectorAll('.deleteCustomerBtn');
-       deleteCustomerBtn.forEach( (elem) => {
-          elem.addEventListener('click', function (event) {
-          event.preventDefault();
-          const customerId = this.parentNode.id;
-          const customerfullName = this.parentNode.dataset.fullname;
-          const text = `Are you sure, you want to delete user : ${customerfullName} ?`;
-          console.log(customerId);
-          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
-          const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
-          customerIDHolder.classList = customerId;
-          customerIDHolder.innerText = text;
-        });
-      });
 
 
         const issueCreditsToCustomerForm = document.querySelector('#issueCreditsToCustomerForm');
@@ -292,6 +276,35 @@
             }
             }
         });
+
+
+        
+        // delete customer
+       // INJECT CUSTOMER ID TO THE MODAL
+       const deleteCustomerBtn = document.querySelectorAll('.deleteCustomerBtn');
+       deleteCustomerBtn.forEach( (elem) => {
+          elem.addEventListener('click', function (event) {
+          event.preventDefault();
+          const customerId = this.parentNode.id;
+          const customerfullName = this.parentNode.dataset.fullname;
+          const text = `Customer Name : ${customerfullName}`;
+          console.log(customerId);
+          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
+          const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
+          customerIDHolder.classList = customerId;
+          customerIDHolder.innerText = text;
+        });
+      });
+
+    const deleteCustomerForm = document.querySelector('#deleteCustomerForm');
+    deleteCustomerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
+      const customerId = customerIDHolder.classList;
+      console.log(customerId);
+    });
+
+
 
 
 
