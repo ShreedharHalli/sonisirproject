@@ -102,10 +102,9 @@ module.exports.issuecreditsendpoint_post = async (req, res) => {
 };
 
 module.exports.deletecustomer_post = async (req, res) => {
-    let { customerid } = req.body;
-    console.log(customerid);
+    let { customerId } = req.body;
 try {
-    const deletedCustomer = await User.findByIdAndDelete(customerid);
+    const deletedCustomer = await User.findByIdAndDelete(customerId);
     if (deletedCustomer) {
       console.log('Deleted Customer:', deletedCustomer);
       res.json({ message: 'Customer deleted successfully' });
