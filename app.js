@@ -215,11 +215,9 @@ app.post('/api/sendmessage', async (req, res) => {
   let mobNoAsUID =  formattedwaNo(mobileNo);
   let message = req.body.message;
   let messageType = req.body.type;
-  let fileToSend = req.files.filetosend; // library express-fileupload
-  let fileName = req.files.filename;
-  let mimeType = req.body.mime;
-  let buffer = req.files.foo.data;
-  const media = new MessageMedia(mimeType, buffer);
+  // let fileToSend = req.files.filetosend; // library express-fileupload
+  // let fileName = req.files.filename;
+  
   try {
     User.findById(customerId)
       .then(async (user) => {
@@ -253,7 +251,9 @@ app.post('/api/sendmessage', async (req, res) => {
                     }));
                   });
                   } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
-                    
+                    let mimeType = req.body.mime;
+                    let buffer = req.files.foo.data;
+                    const media = new MessageMedia(mimeType, buffer);
                     const client = session.client;
                   await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
                     user.AvailableCredits--;
@@ -319,7 +319,9 @@ app.post('/api/sendmessage', async (req, res) => {
                       }));
                     });
                     } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
-                      
+                      let mimeType = req.body.mime;
+                      let buffer = req.files.foo.data;
+                      const media = new MessageMedia(mimeType, buffer);
                       const client = session.client;
                     await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
                       user.AvailableCredits--;
