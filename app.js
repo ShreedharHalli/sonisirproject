@@ -293,7 +293,6 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-                  console.log(client);
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
@@ -306,6 +305,7 @@ app.post('/api/sendmessage', async (req, res) => {
                       console.log('i m called');
                       const client = session.client;
                     await client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                      console.log(response);
                       user.AvailableCredits--;
                       await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
                       res.write(JSON.stringify({
