@@ -315,6 +315,7 @@
       event.preventDefault();
       const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
       const customerId = customerIDHolder.classList;
+      console.log(customerId);
       try {
         const res = await fetch('/deletecustomer', {
           method: 'POST',
