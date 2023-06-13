@@ -11,6 +11,7 @@ router.get('/logout', authController.logout_get);
 router.get('/sonisirpage', authController.soniSirPage_get);
 router.post('/login', authController.login_post);
 router.post('/issuecreditsendpoint', authController.issuecreditsendpoint_post);
+router.post('/deletecustomer', authController.deletecustomer_post);
 
 
 module.exports = router;

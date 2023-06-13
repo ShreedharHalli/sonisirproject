@@ -105,11 +105,11 @@
   </div>
 
 
-  
+
   <!-- Modal Structure -->
   <div id="deleteCustomerModal" class="modal">
     <div class="modal-content">
-      <h4 class="center">Are You Sure ?</h4>
+      <h4 class="center">Are you sure about deleting below customer ?</h4>
       <div class="row">
         <form class="col s12" id="deleteCustomerForm">
           <div class="row">
@@ -122,7 +122,7 @@
               <input name="customerID" id="customerID" type="text">
             </div>
           </div> -->
-          
+
           <button class="waves-effect waves-light btn red center">Delete</button>
         </form>
       </div>
@@ -147,34 +147,48 @@
         </tr>
       </thead>
 
-      <% if (userListForSoniSirPage != '') { %>
+      <% if (userListForSoniSirPage !='' ) { %>
 
-        <% userListForSoniSirPage.forEach((elem, index) => { %>
+        <% userListForSoniSirPage.forEach((elem, index)=> { %>
           <tbody>
             <tr>
-              <td><%= elem.fullName %></td>
-              <td><%= elem.email %></td>
-              <td><%= elem._id %></td>
-              
-              <% if (elem.connectedWhatsAppDevices.length > 0) { %>
-              <% elem.connectedWhatsAppDevices.forEach((devices, index) => { %>
-                    <td><%= devices.connectedWano %></td>
-                <% }) %>
-                <% } else { %>
-                  <td><%= 0 %></td>
-                  <% } %>
-              <td><%= elem.AvailableCredits %></td>
-              <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal" class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
-              
-              <td id="<%= elem._id %>" data-fullname="<%= elem.fullName %>"><i href="#deleteCustomerModal" class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
+              <td>
+                <%= elem.fullName %>
+              </td>
+              <td>
+                <%= elem.email %>
+              </td>
+              <td>
+                <%= elem._id %>
+              </td>
+
+              <% if (elem.connectedWhatsAppDevices.length> 0) { %>
+                <% elem.connectedWhatsAppDevices.forEach((devices, index)=> { %>
+                  <td>
+                    <%= devices.connectedWano %>
+                  </td>
+                  <% }) %>
+                    <% } else { %>
+                      <td>
+                        <%= 0 %>
+                      </td>
+                      <% } %>
+                        <td>
+                          <%= elem.AvailableCredits %>
+                        </td>
+                        <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal"
+                            class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
+
+                        <td id="<%= elem._id %>" data-fullname="<%= elem.fullName %>"><i href="#deleteCustomerModal"
+                            class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
             </tr>
           </tbody>
           <% }) %>
 
-        <% } else { %>
+            <% } else { %>
 
-          <h5>Couldn't find users in Database</h3>
-          <% } %>
+              <h5>Couldn't find users in Database</h3>
+                <% } %>
 
     </table>
   </div>
@@ -194,119 +208,135 @@
       var instances = M.Modal.init(elems, {});
 
     });
-        const form = document.querySelector('#createNewUserForm');
-        let emailError = document.querySelector('.email-error');
-        let passwordError = document.querySelector('.password-error');
+    const form = document.querySelector('#createNewUserForm');
+    let emailError = document.querySelector('.email-error');
+    let passwordError = document.querySelector('.password-error');
 
-          
-        
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            emailError.textContent = '';
-            passwordError.textContent = '';
-            const fullName = form.fullName.value;
-            const email = form.email.value;
-            const password = form.password.value;
-            try {
-                 const res = await fetch('/register', { 
-                    method: 'POST',
-                    body: JSON.stringify({fullName, email, password}),
-                    headers: {'Content-Type': 'application/json'}
-                  });
-                  const data = await res.json();
-                  if (data.errors) {
-                    emailError.textContent = data.errors.email;
-                    passwordError.textContent = data.errors.password;
-                  }
-                  if (data.user) {
-                    location.assign('/sonisirpage');
-                  }
-            } catch (error) {
-                console.log(error);
-            }
-        })
 
-        // INJECT CUSTOMER ID TO THE MODAL
-        const issueCreditsBtn = document.querySelectorAll('.issueCreditsBtn');
-        issueCreditsBtn.forEach( (elem) => {
-          elem.addEventListener('click', function (event) {
-          event.preventDefault();
-          const customerId = this.parentNode.id;
-          console.log(customerId);
-          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#issueCreditsToCustomerModal'));
-          const customerIDHolder = document.querySelector('#customerID');
-          customerIDHolder.value = customerId;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      emailError.textContent = '';
+      passwordError.textContent = '';
+      const fullName = form.fullName.value;
+      const email = form.email.value;
+      const password = form.password.value;
+      try {
+        const res = await fetch('/register', {
+          method: 'POST',
+          body: JSON.stringify({ fullName, email, password }),
+          headers: { 'Content-Type': 'application/json' }
         });
+        const data = await res.json();
+        if (data.errors) {
+          emailError.textContent = data.errors.email;
+          passwordError.textContent = data.errors.password;
+        }
+        if (data.user) {
+          location.assign('/sonisirpage');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })
+
+    // INJECT CUSTOMER ID TO THE MODAL
+    const issueCreditsBtn = document.querySelectorAll('.issueCreditsBtn');
+    issueCreditsBtn.forEach((elem) => {
+      elem.addEventListener('click', function (event) {
+        event.preventDefault();
+        const customerId = this.parentNode.id;
+        console.log(customerId);
+        const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#issueCreditsToCustomerModal'));
+        const customerIDHolder = document.querySelector('#customerID');
+        customerIDHolder.value = customerId;
       });
+    });
 
 
 
-        const issueCreditsToCustomerForm = document.querySelector('#issueCreditsToCustomerForm');
-        issueCreditsToCustomerForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            let customerid = issueCreditsToCustomerForm.customerID.value;
-            console.log(customerid);
-            let credits = issueCreditsToCustomerForm.issueCredits.value;
-            if (credits < 1 || isNaN(credits)) {
-              document.getElementById('numberError').style.display = 'block';
-            } else {
-              try {
-                 const res = await fetch('/issuecreditsendpoint', { 
-                    method: 'POST',
-                    body: JSON.stringify({customerid, credits}),
-                    headers: {'Content-Type': 'application/json'}
-                  });
-                  const data = await res.json();
-                  console.log(data.acknowledged);
-                  if (data.errors) {
-                    // emailError.textContent = data.errors.email;
-                    // passwordError.textContent = data.errors.password;
-                  }
-                  if (data.acknowledged) {
-                    issueCreditsToCustomerForm.reset();
-                    let elem = document.querySelector('#issueCreditsToCustomerModal');
-                    M.Modal.init();
-                    let instance = M.Modal.getInstance(elem);
-                    instance.close();
-                    location.assign('/sonisirpage');
-                  }
-            } catch (error) {
-                console.log(error);
-            }
-            }
-        });
+    const issueCreditsToCustomerForm = document.querySelector('#issueCreditsToCustomerForm');
+    issueCreditsToCustomerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let customerid = issueCreditsToCustomerForm.customerID.value;
+      console.log(customerid);
+      let credits = issueCreditsToCustomerForm.issueCredits.value;
+      if (credits < 1 || isNaN(credits)) {
+        document.getElementById('numberError').style.display = 'block';
+      } else {
+        try {
+          const res = await fetch('/issuecreditsendpoint', {
+            method: 'POST',
+            body: JSON.stringify({ customerid, credits }),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+          console.log(data.acknowledged);
+          if (data.errors) {
+            // emailError.textContent = data.errors.email;
+            // passwordError.textContent = data.errors.password;
+          }
+          if (data.acknowledged) {
+            issueCreditsToCustomerForm.reset();
+            let elem = document.querySelector('#issueCreditsToCustomerModal');
+            M.Modal.init();
+            let instance = M.Modal.getInstance(elem);
+            instance.close();
+            location.assign('/sonisirpage');
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
 
 
-        
-        // delete customer
-       // INJECT CUSTOMER ID TO THE MODAL
-       const deleteCustomerBtn = document.querySelectorAll('.deleteCustomerBtn');
-       deleteCustomerBtn.forEach( (elem) => {
-          elem.addEventListener('click', function (event) {
-          event.preventDefault();
-          const customerId = this.parentNode.id;
-          const customerfullName = this.parentNode.dataset.fullname;
-          const text = `Customer Name : ${customerfullName}`;
-          console.log(customerId);
-          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
-          const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
-          customerIDHolder.classList = customerId;
-          customerIDHolder.innerText = text;
-        });
+
+    // delete customer
+    // INJECT CUSTOMER ID TO THE MODAL
+    const deleteCustomerBtn = document.querySelectorAll('.deleteCustomerBtn');
+    deleteCustomerBtn.forEach((elem) => {
+      elem.addEventListener('click', function (event) {
+        event.preventDefault();
+        const customerId = this.parentNode.id;
+        const customerfullName = this.parentNode.dataset.fullname;
+        const text = `Customer Name : ${customerfullName}`;
+        console.log(customerId);
+        const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
+        const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
+        customerIDHolder.classList = customerId;
+        customerIDHolder.innerText = text;
       });
+    });
 
     const deleteCustomerForm = document.querySelector('#deleteCustomerForm');
     deleteCustomerForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
       const customerId = customerIDHolder.classList;
-      console.log(customerId);
+      try {
+        const res = await fetch('/deletecustomer', {
+          method: 'POST',
+          body: JSON.stringify({ customerid }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        console.log(data);
+        if (data.message == 'success') {
+          deleteCustomerForm.reset();
+          let elem = document.querySelector('#deleteCustomerModal');
+            M.Modal.init();
+            let instance = M.Modal.getInstance(elem);
+            instance.close();
+            location.assign('/sonisirpage');
+        } else {
+          console.log('something went wrong');
+        }
+      } catch (error) {
+        console.log(error);
+      }
     });
-
-
-
-
 
   </script>
 </body>
