@@ -318,7 +318,7 @@
       try {
         const res = await fetch('/deletecustomer', {
           method: 'POST',
-          body: JSON.stringify({ customerid }),
+          body: JSON.stringify({ customerId }),
           headers: { 'Content-Type': 'application/json' }
         });
         const data = await res.json();
