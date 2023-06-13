@@ -41,7 +41,7 @@ let newlyGeneratedQRCode = '';
 
 //database connection
 let store;
-console.log(process.env.MONGODB_URL);
+// console.log(process.env.MONGODB_URL);
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true } ).then(e => {
   console.log('Mongodb is connected');
   store = new MongoStore({ mongoose: mongoose });
@@ -227,12 +227,10 @@ app.post('/api/sendmessage', async (req, res) => {
             response: "Customer Not Found"
           });
         } else {
-          console.log('available credits: ' + user.AvailableCredits);
           if (user.AvailableCredits > 0) {
             for (const device of user.connectedWhatsAppDevices) {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
-                console.log('token: ' + device.token);
                 const session = sessionMap.get(token);
                 if (session) {
                   if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
@@ -295,7 +293,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-
+                  console.log(client);
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
