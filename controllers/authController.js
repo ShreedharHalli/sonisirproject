@@ -104,8 +104,11 @@ module.exports.issuecreditsendpoint_post = async (req, res) => {
 module.exports.deletecustomer_post = async (req, res) => {
     let { customerid } = req.body;
     try {
-        const updatedCredits = await User.deleteOne({ _id: new mongo.ObjectId(customerid) }, function (err, result) {     
+        const deleteCustomer = await User.deleteOne({ _id: new mongo.ObjectId(customerid) }, function (err, result) { 
+            console.log(err);    
+            console.log(result);    
         });
+        console.log(deleteCustomer);
         res.status(200).json({ message: 'success' });
     } catch (error) {
         res.status(400).json( { message: 'error' });
