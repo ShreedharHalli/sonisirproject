@@ -105,6 +105,31 @@
   </div>
 
 
+  
+  <!-- Modal Structure -->
+  <div id="deleteCustomerModal" class="modal">
+    <div class="modal-content">
+      <h4 class="center">Delete Customer</h4>
+      <div class="row">
+        <form class="col s12" id="issueCreditsToCustomerForm">
+          <div class="row">
+            <div class="input-field col s12">
+              <h5 id="deleteCustomerDislayName"></h5>
+            </div>
+          </div>
+          <!-- <div class="row" style="display: none;">
+            <div>
+              <input name="customerID" id="customerID" type="text">
+            </div>
+          </div> -->
+          
+          <button class="waves-effect waves-light btn red center">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
 
 
 
@@ -141,7 +166,7 @@
               <td><%= elem.AvailableCredits %></td>
               <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal" class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
               
-              <td><i class="material-icons">delete_sweep</i></td>
+              <td id="<%= elem._id %>" value="<%= elem.fullName %>" ><i href="#deleteCustomerModal" class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
             </tr>
           </tbody>
           <% }) %>
@@ -214,6 +239,24 @@
           customerIDHolder.value = customerId;
         });
       });
+
+        // delete customer
+       // INJECT CUSTOMER ID TO THE MODAL
+       const deleteCustomerBtn = document.querySelectorAll('.deleteCustomerBtn');
+       deleteCustomerBtn.forEach( (elem) => {
+          elem.addEventListener('click', function (event) {
+          event.preventDefault();
+          const customerId = this.parentNode.id;
+          const customerfullName = this.parentNode.fullName;
+          const text = `Are you sure, you want to delete user : ${customerfullName}`;
+          console.log(customerId);
+          const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
+          const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
+          customerIDHolder.classList = customerId;
+          customerIDHolder.value = customerfullName;
+        });
+      });
+
 
         const issueCreditsToCustomerForm = document.querySelector('#issueCreditsToCustomerForm');
         issueCreditsToCustomerForm.addEventListener('submit', async (event) => {
