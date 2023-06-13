@@ -103,15 +103,18 @@ module.exports.issuecreditsendpoint_post = async (req, res) => {
 
 module.exports.deletecustomer_post = async (req, res) => {
     let { customerid } = req.body;
-    try {
-        const deleteCustomer = await User.deleteOne({ _id: new mongo.ObjectId(customerid) }, function (err, result) { 
-            console.log(err);    
-            console.log(result);    
-        });
-        console.log(deleteCustomer);
-        res.status(200).json({ message: 'success' });
-    } catch (error) {
-        res.status(400).json( { message: 'error' });
+try {
+    const deletedCustomer = await User.findByIdAndDelete(customerid);
+    if (deletedCustomer) {
+      console.log('Deleted Customer:', deletedCustomer);
+      res.json({ message: 'Customer deleted successfully' });
+    } else {
+      console.log('Customer not found.');
+      res.json({ message: 'Customer not found' });
     }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'An error occurred while deleting the document' });
+  }
 };
 

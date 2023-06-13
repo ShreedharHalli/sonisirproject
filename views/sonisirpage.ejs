@@ -323,14 +323,14 @@
         });
         const data = await res.json();
         console.log(data);
-        if (data.message == 'success') {
+        if (data.message == 'Customer deleted successfully') {
           deleteCustomerForm.reset();
           let elem = document.querySelector('#deleteCustomerModal');
             M.Modal.init();
             let instance = M.Modal.getInstance(elem);
             instance.close();
             location.assign('/sonisirpage');
-        } else {
+        } else if (data.message === 'Customer not found') {
           console.log('something went wrong');
         }
       } catch (error) {
