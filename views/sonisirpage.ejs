@@ -113,7 +113,7 @@
       <div class="row">
         <form class="col s12" id="issueCreditsToCustomerForm">
           <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col s12 center">
               <h5 id="deleteCustomerDislayName"></h5>
             </div>
           </div>
@@ -247,13 +247,13 @@
           elem.addEventListener('click', function (event) {
           event.preventDefault();
           const customerId = this.parentNode.id;
-          const customerfullName = this.parentNode.fullName;
-          const text = `Are you sure, you want to delete user : ${customerfullName}`;
+          const customerfullName = this.parentNode.value;
+          const text = `Are you sure, you want to delete user : ${customerfullName} ?`;
           console.log(customerId);
           const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
           const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
           customerIDHolder.classList = customerId;
-          customerIDHolder.innerText = customerfullName;
+          customerIDHolder.innerText = text;
         });
       });
 
