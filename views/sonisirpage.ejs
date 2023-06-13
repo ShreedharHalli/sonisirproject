@@ -302,7 +302,6 @@
         const customerId = this.parentNode.id;
         const customerfullName = this.parentNode.dataset.fullname;
         const text = `Customer Name : ${customerfullName}`;
-        console.log(customerId);
         const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
         const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
         customerIDHolder.classList = customerId;
@@ -315,7 +314,7 @@
       event.preventDefault();
       const customerIDHolder = document.querySelector('#deleteCustomerDislayName');
       const customerId = customerIDHolder.classList;
-      console.log(customerId);
+      console.log('customer id is ' + customerId);
       try {
         const res = await fetch('/deletecustomer', {
           method: 'POST',
