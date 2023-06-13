@@ -124,6 +124,7 @@
         let elem = document.getElementById("qrcodeModal");
         let instance = M.Modal.getInstance(elem);
         instance.close();
+        location.assign('/customerpage');
       } else if (event.data != 'stopGeneratingQRCode') {
         console.log(event.data)
         let div = `

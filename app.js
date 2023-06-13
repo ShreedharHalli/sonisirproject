@@ -211,6 +211,7 @@ app.post('/api/sendmessage', async (req, res) => {
   let customerId = req.body.customerid;
   let whatsappClientId = req.body.serverWhatsappno;
   let mobileNo = req.body.mobileno;
+  console.log(mobileNo);
   let mobNoAsUID =  formattedwaNo(mobileNo);
   let message = req.body.message;
   let messageType = req.body.type;
@@ -364,10 +365,18 @@ app.post('/api/sendmessage', async (req, res) => {
 
 
 function formattedwaNo(mobileNo) {
-  let stringed = mobileNo.toString();
+  try {
+    if (mobileNo === undefined) {
+      return
+    } else {
+      let stringed = mobileNo.toString();
   if (stringed.length === 10) {
     let mobNoAsUID = `91${stringed}@c.us`;
     return mobNoAsUID
+  }
+    }
+  } catch (error) {
+   console.log(error); 
   }
 }
 
