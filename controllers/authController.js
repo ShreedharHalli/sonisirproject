@@ -64,7 +64,7 @@ module.exports.login_get = (req, res) => {
 };
 
 module.exports.customerPage_get = (req, res) => {
-    res.render('customerPage')
+    res.render('customerpage')
 };
 
 module.exports.login_post = async (req, res) => {

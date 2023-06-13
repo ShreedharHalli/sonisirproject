@@ -8,7 +8,7 @@ router.post('/register', authController.register_post);
 router.get('/login', authController.login_get);
 router.get('/customerpage', authController.customerPage_get);
 router.get('/logout', authController.logout_get);
-router.get('/soniSirpage', authController.soniSirPage_get);
+router.get('/sonisirpage', authController.soniSirPage_get);
 router.post('/login', authController.login_post);
 router.post('/issuecreditsendpoint', authController.issuecreditsendpoint_post);
 

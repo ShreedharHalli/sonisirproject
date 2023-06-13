@@ -166,7 +166,7 @@
               <td><%= elem.AvailableCredits %></td>
               <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal" class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
               
-              <td id="<%= elem._id %>" value="<%= elem.fullName %>" ><i href="#deleteCustomerModal" class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
+              <td id="<%= elem._id %>" data-fullname="<%= elem.fullName %>"><i href="#deleteCustomerModal" class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
             </tr>
           </tbody>
           <% }) %>
@@ -247,7 +247,7 @@
           elem.addEventListener('click', function (event) {
           event.preventDefault();
           const customerId = this.parentNode.id;
-          const customerfullName = this.parentNode.value;
+          const customerfullName = this.parentNode.dataset.fullname;
           const text = `Are you sure, you want to delete user : ${customerfullName} ?`;
           console.log(customerId);
           const issueCreditsmodal = M.Modal.getInstance(document.querySelector('#deleteCustomerModal'));
