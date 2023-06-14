@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
 
 // fire a function before doc is saved to db
 userSchema.pre('save', async function (next) {
-    console.log('presave password is ' + this.password);
+    console.log('fullname is ' + this.fullName);
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     next();
