@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
-const User = require('../models/User');
 
 const userSchema = new mongoose.Schema({
     fullName: {
@@ -37,11 +36,15 @@ const userSchema = new mongoose.Schema({
 // fire a function before doc is saved to db
 userSchema.pre('save', async function (next) {
     const userEmail = this.email;
-    let userAlreadyAvailable = await User.find( { "email": userEmail } );
-    console.log(userAlreadyAvailable);
+    // let userAlreadyAvailable = await User.find( { "email": userEmail } );
+    const existingUser = await this.constructor.findOne( { "email": userEmail } );
+    if (existingUser) {
+        next();
+    }else {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     next();
+}
 });
 
 // static method to login user
