@@ -97,7 +97,6 @@ app.get('/generateqrcode', (req, res) => {
     });
 
     client.on('remote_session_saved', async () => {
-      await store.save( { session: `RemoteAuth-${token}` } );
       console.log('remote session saved to mongodb');
       let connectedWhatsappNo = client.info.wid.user
       sessionMap.set(token, {
@@ -207,8 +206,9 @@ function insertClientSessionDetailsToCustomerDocument(custObj, token, connectedW
 }
 
 
+
+
 app.post('/api/sendmessage', async (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
   let customerId = req.body.customerid;
   let whatsappClientId = req.body.serverWhatsappno;
   let mobileNo = req.body.mobileno;
@@ -233,28 +233,25 @@ app.post('/api/sendmessage', async (req, res) => {
             for (const device of user.connectedWhatsAppDevices) {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
-                // const session = sessionMap.get(token);
-                const session = await store.sessionExists({session: `RemoteAuth-${token}`});
- 
+                const session = sessionMap.get(token);
                 console.log('session is', session);
                 if (session) {
                   if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                     console.log('payload is sent from local storage client');
-                    // const client = session.client;
-                    const client = await store.extract({session: `RemoteAuth-${token}`});
+                    const client = session.client;
                   await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                     user.AvailableCredits--;
                     await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
-                    res.write(JSON.stringify({
+                    res.status(200).json({
                       status: true,
                       response: response
-                    }));
+                    });
                   }).catch(err => {
                     console.log(err);
-                    res.write(JSON.stringify({
+                    res.status(500).json({
                       status: false,
                       response: err
-                    }));
+                    });
                   });
                   } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
                     let mimeType = req.body.mime;
@@ -264,28 +261,93 @@ app.post('/api/sendmessage', async (req, res) => {
                   await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
                     user.AvailableCredits--;
                     await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
-                    res.write(JSON.stringify({
+                    res.status(200).json({
                       status: true,
                       response: response
-                    }));
+                    });
                   }).catch(err => {
                     console.log(err);
-                    res.write(JSON.stringify({
+                    res.status(500).json({
                       status: false,
                       response: err
-                    }));
+                    });
                   });
                   }
+                } else {
+                  const client = new Client({
+                    restartOnAuthFail: true,
+                    puppeteer: {
+                      headless: true,
+                      args: [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                        '--disable-dev-shm-usage',
+                        '--disable-accelerated-2d-canvas',
+                        '--no-first-run',
+                        '--no-zygote',
+                        // '--single-process', // <- this one doesn't works in Windows
+                        '--disable-gpu'
+                      ],
+                    },
+                    authStrategy: new RemoteAuth({ // check on linux machine for compatibility
+                      clientId: token,
+                      store: store,
+                      backupSyncIntervalMs: 300000
+                    })
+                  });
+                  client.initialize();
+                  client.on('ready', async () => {
+                    console.log(`whatsapp is ready, id is ${token}`);
+                    let connectedWhatsappNo = client.info.wid.user;
+                    sessionMap.set(token, {
+                      id: token,
+                      client: client,
+                      serverWhatsappNo: connectedWhatsappNo
+                    });
+                    if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
+                      console.log('payload is sent from new client');
+                      const client = session.client;
+                    await client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                      console.log(response);
+                      user.AvailableCredits--;
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      res.status(200).json({
+                        status: true,
+                        response: response
+                      });
+                    }).catch(err => {
+                      console.log(err);
+                      res.status(500).json({
+                        status: false,
+                        response: err
+                      });
+                    });
+                    } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
+                      let mimeType = req.body.mime;
+                      let buffer = req.files.foo.data;
+                      const media = new MessageMedia(mimeType, buffer);
+                      const client = session.client;
+                    await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
+                      user.AvailableCredits--;
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      res.status(200).json({
+                        status: true,
+                        response: response
+                      });
+                    }).catch(err => {
+                      console.log(err);
+                      res.status(500).json({
+                        status: false,
+                        response: err
+                      });
+                    });
+                    }
+                  })
                 }
                 break;
               }
             }
           }
-          let creditsObj = {
-              AvailableCredits: user.AvailableCredits
-          }
-          res.write(JSON.stringify(creditsObj));
-          res.end();
         }
       })
       .catch(error => {
@@ -301,6 +363,9 @@ app.post('/api/sendmessage', async (req, res) => {
     console.log(error);
   }
 }); 
+
+
+
 
 
 
@@ -470,7 +535,7 @@ app.post('/api/sendmessage', async (req, res) => {
     console.log(error);
   }
 }); 
-*/
+ */
 
 
 function formattedwaNo(mobileNo) {
