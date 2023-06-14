@@ -96,7 +96,8 @@ app.get('/generateqrcode', (req, res) => {
       })
     });
 
-    client.on('remote_session_saved', () => {
+    client.on('remote_session_saved', async () => {
+      await store.save( { session: token } );
       console.log('remote session saved to mongodb');
       let connectedWhatsappNo = client.info.wid.user
       sessionMap.set(token, {
