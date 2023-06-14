@@ -97,7 +97,7 @@ app.get('/generateqrcode', (req, res) => {
     });
 
     client.on('remote_session_saved', async () => {
-      await store.save( { session: token } );
+      await store.save( { session: `RemoteAuth-${token}` } );
       console.log('remote session saved to mongodb');
       let connectedWhatsappNo = client.info.wid.user
       sessionMap.set(token, {
@@ -234,14 +234,14 @@ app.post('/api/sendmessage', async (req, res) => {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
                 // const session = sessionMap.get(token);
-                const session = await store.sessionExists({session: token});
+                const session = await store.sessionExists({session: `RemoteAuth-${token}`});
  
                 console.log('session is', session);
-                if (!session) {
+                if (session) {
                   if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                     console.log('payload is sent from local storage client');
                     // const client = session.client;
-                    const client = await store.extract({session: token});
+                    const client = await store.extract({session: `RemoteAuth-${token}`});
                   await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                     user.AvailableCredits--;
                     await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
