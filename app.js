@@ -233,11 +233,10 @@ app.post('/api/sendmessage', async (req, res) => {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
                 // const session = sessionMap.get(token);
-                console.log(token);
                 const session = await store.sessionExists({session: token});
  
                 console.log('session is', session);
-                if (session) {
+                if (!session) {
                   if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                     console.log('payload is sent from local storage client');
                     // const client = session.client;
