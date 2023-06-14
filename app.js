@@ -228,7 +228,6 @@ app.post('/api/sendmessage', async (req, res) => {
             response: "Customer Not Found"
           });
         } else {
-          console.log('available credits', user.AvailableCredits);
           if (user.AvailableCredits > 0) {
             for (const device of user.connectedWhatsAppDevices) {
               if (device.connectedWano === whatsappClientId) {
@@ -296,6 +295,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
+                  console.log(client);
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
