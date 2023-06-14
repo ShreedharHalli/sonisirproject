@@ -238,7 +238,7 @@ app.post('/api/sendmessage', async (req, res) => {
                 console.log('session is', session);
                 if (session) {
                   if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
-                    console.log('i m called');
+                    console.log('payload is sent from local storage client');
                     const client = session.client;
                   await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                     user.AvailableCredits--;
@@ -306,7 +306,7 @@ app.post('/api/sendmessage', async (req, res) => {
                       serverWhatsappNo: connectedWhatsappNo
                     });
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
-                      console.log('i m called');
+                      console.log('payload is sent from new client');
                       const client = session.client;
                     await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                       console.log(response);
