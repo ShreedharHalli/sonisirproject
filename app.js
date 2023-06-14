@@ -232,6 +232,108 @@ app.post('/api/sendmessage', async (req, res) => {
             for (const device of user.connectedWhatsAppDevices) {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
+                // const session = sessionMap.get(token);
+                const session = await store.sessionExists({session: token});
+ 
+                console.log('session is', session);
+                if (session) {
+                  if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
+                    console.log('payload is sent from local storage client');
+                    // const client = session.client;
+                    const client = await store.extract({session: token});
+                  await client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                    user.AvailableCredits--;
+                    await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                    res.write(JSON.stringify({
+                      status: true,
+                      response: response
+                    }));
+                  }).catch(err => {
+                    console.log(err);
+                    res.write(JSON.stringify({
+                      status: false,
+                      response: err
+                    }));
+                  });
+                  } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
+                    let mimeType = req.body.mime;
+                    let buffer = req.files.foo.data;
+                    const media = new MessageMedia(mimeType, buffer);
+                    const client = session.client;
+                  await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
+                    user.AvailableCredits--;
+                    await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                    res.write(JSON.stringify({
+                      status: true,
+                      response: response
+                    }));
+                  }).catch(err => {
+                    console.log(err);
+                    res.write(JSON.stringify({
+                      status: false,
+                      response: err
+                    }));
+                  });
+                  }
+                }
+                break;
+              }
+            }
+          }
+          let creditsObj = {
+              AvailableCredits: user.AvailableCredits
+          }
+          res.write(JSON.stringify(creditsObj));
+          res.end();
+        }
+      })
+      .catch(error => {
+        let errorMessage = error.message;
+        if (errorMessage.includes('Cast to ObjectId')) {
+          res.status(500).json({
+            status: false,
+            response: "Customer Not Found."
+          });
+        }
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}); 
+
+
+
+
+
+
+
+/* 
+app.post('/api/sendmessage', async (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  let customerId = req.body.customerid;
+  let whatsappClientId = req.body.serverWhatsappno;
+  let mobileNo = req.body.mobileno;
+  let mobNoAsUID =  formattedwaNo(mobileNo);
+  let message = req.body.message;
+  let messageType = req.body.type;
+  console.log(messageType);
+  // let fileToSend = req.files.filetosend; // library express-fileupload
+  // let fileName = req.files.filename;
+  
+  try {
+    User.findById(customerId)
+      .then(async (user) => {
+        if (!user) {
+          // Handle case where user is not found
+          res.status(404).json({
+            status: false,
+            response: "Customer Not Found"
+          });
+        } else {
+          if (user.AvailableCredits > 0) {
+            for (const device of user.connectedWhatsAppDevices) {
+              if (device.connectedWano === whatsappClientId) {
+                token = device.token;
                 const session = sessionMap.get(token);
                 console.log('session is', session);
                 if (session) {
@@ -295,7 +397,6 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-                  console.log(client);
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
@@ -367,7 +468,8 @@ app.post('/api/sendmessage', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+}); 
+*/
 
 
 function formattedwaNo(mobileNo) {
