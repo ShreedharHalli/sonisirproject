@@ -233,7 +233,6 @@ app.post('/api/sendmessage', async (req, res) => {
             for (const device of user.connectedWhatsAppDevices) {
               if (device.connectedWano === whatsappClientId) {
                 token = device.token;
-                console.log('token is', device.token);
                 const session = sessionMap.get(token);
                 console.log('session is', session);
                 if (session) {
