@@ -274,6 +274,7 @@ app.post('/api/sendmessage', async (req, res) => {
                   });
                   }
                 } else {
+                  console.log('else is called');
                   const client = new Client({
                     restartOnAuthFail: true,
                     puppeteer: {
@@ -296,6 +297,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
+                  console.log('client initialized');
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
