@@ -276,6 +276,20 @@ app.post('/api/sendmessage', async (req, res) => {
                 } else {
                   console.log(token);
                   const client = new Client({
+                    restartOnAuthFail: true,
+                    puppeteer: {
+                      headless: true,
+                      args: [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                        '--disable-dev-shm-usage',
+                        '--disable-accelerated-2d-canvas',
+                        '--no-first-run',
+                        '--no-zygote',
+                        // '--single-process', // <- this one doesn't works in Windows
+                        '--disable-gpu'
+                      ],
+                    },
                     authStrategy: new RemoteAuth({ // check on linux machine for compatibility
                       clientId: token,
                       store: store,
@@ -331,7 +345,6 @@ app.post('/api/sendmessage', async (req, res) => {
                     }
                   })
                   client.initialize();
-                  console.log('else reached to the end');
                 }
                 break;
               }
