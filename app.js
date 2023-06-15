@@ -331,6 +331,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     }
                   })
                   client.initialize();
+                  console.log('else reached to the end');
                 }
                 break;
               }
