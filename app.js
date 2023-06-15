@@ -215,7 +215,6 @@ app.post('/api/sendmessage', async (req, res) => {
   let mobNoAsUID =  formattedwaNo(mobileNo);
   let message = req.body.message;
   let messageType = req.body.type;
-  console.log(messageType);
   // let fileToSend = req.files.filetosend; // library express-fileupload
   // let fileName = req.files.filename;
   
@@ -296,7 +295,10 @@ app.post('/api/sendmessage', async (req, res) => {
                       backupSyncIntervalMs: 300000
                     })
                   });
-                  client.on('ready', () => {
+                  client.on('qr', () => {
+                    console.log('asking qr code');
+                  });
+                  client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
                     sessionMap.set(token, {
@@ -308,10 +310,10 @@ app.post('/api/sendmessage', async (req, res) => {
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                       console.log('payload is sent from new client');
                       // const client = session.client;
-                     client.sendMessage(mobNoAsUID, message).then((response) => {
+                    await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                       console.log(response);
                       user.AvailableCredits--;
-                      User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
                       res.status(200).json({
                         status: true,
                         response: response
@@ -328,9 +330,9 @@ app.post('/api/sendmessage', async (req, res) => {
                       let buffer = req.files.foo.data;
                       const media = new MessageMedia(mimeType, buffer);
                       const client = session.client;
-                    client.sendMessage(mobNoAsUID, media, {caption: message}).then( (response) => {
+                    await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
                       user.AvailableCredits--;
-                      User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
                       res.status(200).json({
                         status: true,
                         response: response
