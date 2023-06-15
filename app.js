@@ -296,8 +296,6 @@ app.post('/api/sendmessage', async (req, res) => {
                       backupSyncIntervalMs: 300000
                     })
                   });
-                  client.initialize();
-                  console.log(client);
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
@@ -346,6 +344,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     });
                     }
                   })
+                  client.initialize();
                 }
                 break;
               }
