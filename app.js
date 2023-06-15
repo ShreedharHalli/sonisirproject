@@ -296,7 +296,7 @@ app.post('/api/sendmessage', async (req, res) => {
                       backupSyncIntervalMs: 300000
                     })
                   });
-                  client.on('ready', async () => {
+                  client.on('ready', () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
                     sessionMap.set(token, {
@@ -308,7 +308,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                       console.log('payload is sent from new client');
                       // const client = session.client;
-                    await client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                     client.sendMessage(mobNoAsUID, message).then(async (response) => {
                       console.log(response);
                       user.AvailableCredits--;
                       await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
