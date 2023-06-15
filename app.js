@@ -297,8 +297,54 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-                  client.on('ready', () => {
+                  console.log(client);
+                  client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
+                    let connectedWhatsappNo = client.info.wid.user;
+                    sessionMap.set(token, {
+                      id: token,
+                      client: client,
+                      serverWhatsappNo: connectedWhatsappNo
+                    });
+                    console.log('session added to the session map' + sessionMap.get(token));
+                    if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
+                      console.log('payload is sent from new client');
+                      // const client = session.client;
+                    await client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                      console.log(response);
+                      user.AvailableCredits--;
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      res.status(200).json({
+                        status: true,
+                        response: response
+                      });
+                    }).catch(err => {
+                      console.log(err);
+                      res.status(500).json({
+                        status: false,
+                        response: err
+                      });
+                    });
+                    } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
+                      let mimeType = req.body.mime;
+                      let buffer = req.files.foo.data;
+                      const media = new MessageMedia(mimeType, buffer);
+                      const client = session.client;
+                    await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
+                      user.AvailableCredits--;
+                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      res.status(200).json({
+                        status: true,
+                        response: response
+                      });
+                    }).catch(err => {
+                      console.log(err);
+                      res.status(500).json({
+                        status: false,
+                        response: err
+                      });
+                    });
+                    }
                   })
                 }
                 break;
