@@ -297,7 +297,6 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-                  console.log('client initialized');
                   client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
@@ -306,6 +305,7 @@ app.post('/api/sendmessage', async (req, res) => {
                       client: client,
                       serverWhatsappNo: connectedWhatsappNo
                     });
+                    console.log('session added to the session map' + sessionMap.get(token));
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                       console.log('payload is sent from new client');
                       // const client = session.client;
