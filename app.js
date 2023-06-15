@@ -297,7 +297,6 @@ app.post('/api/sendmessage', async (req, res) => {
                     })
                   });
                   client.initialize();
-                  client.on('ready', async () => {
                     console.log(`whatsapp is ready, id is ${token}`);
                     let connectedWhatsappNo = client.info.wid.user;
                     sessionMap.set(token, {
@@ -344,7 +343,6 @@ app.post('/api/sendmessage', async (req, res) => {
                       });
                     });
                     }
-                  })
                 }
                 break;
               }
