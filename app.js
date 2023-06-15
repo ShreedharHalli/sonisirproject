@@ -308,7 +308,7 @@ app.post('/api/sendmessage', async (req, res) => {
                     });
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                       console.log('payload is sent from new client');
-                      const client = session.client;
+                      // const client = session.client;
                     await client.sendMessage(mobNoAsUID, message).then(async (response) => {
                       console.log(response);
                       user.AvailableCredits--;
