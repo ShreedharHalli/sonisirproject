@@ -147,49 +147,7 @@
         </tr>
       </thead>
 
-      <% if (userListForSoniSirPage !='' ) { %>
-
-        <% userListForSoniSirPage.forEach((elem, index)=> { %>
-          <tbody>
-            <tr>
-              <td>
-                <%= elem.fullName %>
-              </td>
-              <td>
-                <%= elem.email %>
-              </td>
-              <td>
-                <%= elem._id %>
-              </td>
-
-              <% if (elem.connectedWhatsAppDevices.length> 0) { %>
-                <% elem.connectedWhatsAppDevices.forEach((devices, index)=> { %>
-                  <td>
-                    <%= devices.connectedWano %>
-                  </td>
-                  <% }) %>
-                    <% } else { %>
-                      <td>
-                        <%= 0 %>
-                      </td>
-                      <% } %>
-                        <td>
-                          <%= elem.AvailableCredits %>
-                        </td>
-                        <td id="<%= elem._id %>"><i href="#issueCreditsToCustomerModal"
-                            class="material-icons issueCreditsBtn modal-trigger">add_shopping_cart</i></td>
-
-                        <td id="<%= elem._id %>" data-fullname="<%= elem.fullName %>"><i href="#deleteCustomerModal"
-                            class="material-icons deleteCustomerBtn modal-trigger">delete_sweep</i></td>
-            </tr>
-          </tbody>
-          <% }) %>
-
-            <% } else { %>
-
-              <h5>Couldn't find users in Database</h3>
-                <% } %>
-
+     
     </table>
   </div>
 
