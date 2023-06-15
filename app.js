@@ -209,6 +209,7 @@ function insertClientSessionDetailsToCustomerDocument(custObj, token, connectedW
 
 
 app.post('/api/sendmessage', async (req, res) => {
+  console.log('remember you have updated the whatsapp-web.js');
   let customerId = req.body.customerid;
   let whatsappClientId = req.body.serverWhatsappno;
   let mobileNo = req.body.mobileno;
@@ -274,6 +275,7 @@ app.post('/api/sendmessage', async (req, res) => {
                   }
                 } else {
                   console.log(token);
+                  store.sessionExists({session: `RemouteAuth-${token}`}).then(result => {console.log('result is ' + result)})
                   const client = new Client({
                     restartOnAuthFail: true,
                     puppeteer: {
