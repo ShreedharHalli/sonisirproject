@@ -308,10 +308,10 @@ app.post('/api/sendmessage', async (req, res) => {
                     if (messageType === 'text') { // SEND ONLY TEXT MESSAGES
                       console.log('payload is sent from new client');
                       // const client = session.client;
-                     client.sendMessage(mobNoAsUID, message).then(async (response) => {
+                     client.sendMessage(mobNoAsUID, message).then((response) => {
                       console.log(response);
                       user.AvailableCredits--;
-                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
                       res.status(200).json({
                         status: true,
                         response: response
@@ -328,9 +328,9 @@ app.post('/api/sendmessage', async (req, res) => {
                       let buffer = req.files.foo.data;
                       const media = new MessageMedia(mimeType, buffer);
                       const client = session.client;
-                    await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
+                    client.sendMessage(mobNoAsUID, media, {caption: message}).then( (response) => {
                       user.AvailableCredits--;
-                      await User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
+                      User.updateOne({ _id: user._id }, { $set: { AvailableCredits: user.AvailableCredits } });
                       res.status(200).json({
                         status: true,
                         response: response
