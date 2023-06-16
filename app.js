@@ -254,8 +254,8 @@ app.post('/api/sendmessage', async (req, res) => {
                     });
                   });
                   } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
-                    let mimeType = req.body.mime;
-                    let buffer = req.files.foo.data;
+                    let mimeType = req.files.file.mimetype;
+                    let buffer = req.files.file.data;
                     const media = new MessageMedia(mimeType, buffer);
                     const client = session.client;
                   await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
@@ -275,7 +275,6 @@ app.post('/api/sendmessage', async (req, res) => {
                   }
                 } else {
                   console.log(token);
-                  store.sessionExists({session: `RemouteAuth-${token}`}).then(result => {console.log('result is ' + result)})
                   const client = new Client({
                     restartOnAuthFail: true,
                     puppeteer: {
@@ -328,8 +327,8 @@ app.post('/api/sendmessage', async (req, res) => {
                       });
                     });
                     } else if (messageType === 'file') {  // SEND ONLY TEXT MESSAGES
-                      let mimeType = req.body.mime;
-                      let buffer = req.files.foo.data;
+                      let mimeType = req.files.file.mimetype;
+                      let buffer = req.files.file.data;
                       const media = new MessageMedia(mimeType, buffer);
                       const client = session.client;
                     await client.sendMessage(mobNoAsUID, media, {caption: message}).then(async (response) => {
