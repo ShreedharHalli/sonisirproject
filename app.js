@@ -5,8 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 const dotenv = require("dotenv");
-const { MongoStore } = require('wwebjs-mongo');
-const { Client, RemoteAuth, MessageMedia, Buttons, List } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia, Buttons, List } = require('whatsapp-web.js');
 const QRCode = require('qrcode');
 const User = require('./models/User');
 const fileUpload = require("express-fileupload");
@@ -17,7 +16,7 @@ const path = require('path');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8001
+const PORT = process.env.PORT || 8000
 
 // middleware
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,12 +38,9 @@ const sessionMap = new Map();
 
 let newlyGeneratedQRCode = '';
 
-//database connection
-let store;
-// console.log(process.env.MONGODB_URL);
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true } ).then(e => {
+mongoose.connect(process.env.MONGODBURI).then(e => {
   console.log('Mongodb is connected');
-  store = new MongoStore({ mongoose: mongoose });
+  // store = new MongoStore({ mongoose: mongoose });
 })
 
 
@@ -89,10 +85,8 @@ app.get('/generateqrcode', (req, res) => {
           '--disable-gpu'
         ],
       },
-      authStrategy: new RemoteAuth({ // check on linux machine for compatibility
+      authStrategy: new LocalAuth({
         clientId: token,
-        store: store,
-        backupSyncIntervalMs: 300000
       })
     });
 
@@ -290,10 +284,8 @@ app.post('/api/sendmessage', async (req, res) => {
                         '--disable-gpu'
                       ],
                     },
-                    authStrategy: new RemoteAuth({ // check on linux machine for compatibility
+                    authStrategy: new LocalAuth({
                       clientId: token,
-                      store: store,
-                      backupSyncIntervalMs: 300000
                     })
                   });
                   client.on('qr', () => {
